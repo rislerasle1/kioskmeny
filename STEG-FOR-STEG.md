@@ -1,10 +1,9 @@
-# VIPrommet beta med Google Sheets
+﻿# Kioskmeny med Google Sheets
 
 CSV-lenkene er ferdig lagt inn i `sheets-config.js`.
 
-## Last opp til GitHub
-Last opp disse filene til roten av `rislerasle1/VIPrommet`:
-- indexbeta.html
+## Filer
+- index.html
 - sidea.html
 - sideb.html
 - sidec.html
@@ -12,7 +11,7 @@ Last opp disse filene til roten av `rislerasle1/VIPrommet`:
 - sheets-config.js
 
 ## Test
-Åpne betaadressen `https://rislerasle1.github.io/VIPrommet/indexbeta.html`.
+Åpne `https://rislerasle1.github.io/kioskmeny/`.
 
 ## Dynamisk meny
 - Maksimalt fire kategoribokser og 16 produkter per menyside.
