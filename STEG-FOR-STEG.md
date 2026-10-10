@@ -7,6 +7,7 @@ CSV-lenkene er ferdig lagt inn i `sheets-config.js`.
 - sidea.html
 - sideb.html
 - sidec.html
+- sided.html
 - google-sheets-loader.js
 - sheets-config.js
 
@@ -18,6 +19,7 @@ CSV-lenkene er ferdig lagt inn i `sheets-config.js`.
 - Flere menysider opprettes automatisk.
 - Data hentes på nytt ved hver sidevisning.
 - Rotasjonen bygges på nytt hvert femte minutt.
+- Klokkesiden (sidea) hoppes over mens kiosken er åpen.
 
 ## Rekvisita (side 2)
 Rekvisita-siden (`sided.html`) vises etter menysidene, med én boks per kategori (f.eks. Rekvisita og Supporter).
