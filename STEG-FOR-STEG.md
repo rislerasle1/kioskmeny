@@ -18,3 +18,11 @@ CSV-lenkene er ferdig lagt inn i `sheets-config.js`.
 - Flere menysider opprettes automatisk.
 - Data hentes på nytt ved hver sidevisning.
 - Rotasjonen bygges på nytt hvert femte minutt.
+
+## Rekvisita (side 2)
+Rekvisita-siden (`sided.html`) vises etter menysidene, med én boks per kategori (f.eks. Rekvisita og Supporter).
+
+- Varene redigeres i fanen **Rekvisita** i regnearket: `Aktiv`, `Kategori`, `Produkt`, `Pris`, `Beskrivelse`, `Tag`, `Rekkefølge`.
+- Ny kategori = skriv et nytt navn i Kategori-kolonnen. Maks fire kategorier og 16 varer per side; flere sider lages automatisk.
+- Tom pris gjør at prisen ikke vises. Tag bruker de samme taggene som Meny-fanen.
+- Tekster-fanen: `rekvisitaIntro` (tekst i sidepanelet) og `rekvisitaNotice` (kort merknad øverst).

@@ -32,7 +32,11 @@ async function loadKioskData(force=false){
   const menuCategories=categories.map(c=>({name:c.name,slot:c.slot,order:c.order,items:products.filter(p=>p.slot===c.slot).sort((a,b)=>a.order-b.order)})).filter(c=>c.items.length);
   const openingHours=hourRows.map(r=>({day:txt(r["Dag"]),open:txt(r["Åpner"]),close:txt(r["Stenger"])})).filter(x=>x.day);
   const dutyPeriods=dutyRows.filter(r=>yes(r["Aktiv"])).map(r=>({start:parseDate(r["Fra dato"]),end:parseDate(r["Til dato"]),team:txt(r["Lag"]),born:txt(r["Årskull"])})).filter(x=>x.start&&x.end&&x.team);
-  cache={settings,menuCategories,openingHours,dutyPeriods}; cacheTime=Date.now(); return cache;
+  let gearRows=[];
+  if(u.rekvisita && !u.rekvisita.startsWith("LIM_INN_")){ try{ gearRows=await getCsv(u.rekvisita); }catch(e){ console.warn("Rekvisita:",e); } }
+  const gear=gearRows.filter(r=>yes(r["Aktiv"])&&txt(r["Produkt"])).map(r=>({category:txt(r["Kategori"])||"Rekvisita",name:txt(r["Produkt"]),price:Number(String(r["Pris"]).replace(',','.'))||0,description:txt(r["Beskrivelse"]),badge:["","Ingen"].includes(txt(r["Tag"]))?"":txt(r["Tag"]),badgeIcon:icons[txt(r["Tag"])]||"",order:Number(r["Rekkefølge"])||999}));
+  const gearCategories=[...new Set(gear.map(g=>g.category))].map(name=>({name,items:gear.filter(g=>g.category===name).sort((a,b)=>a.order-b.order)}));
+  cache={settings,menuCategories,openingHours,dutyPeriods,gearCategories}; cacheTime=Date.now(); return cache;
 }
 function paginateMenu(categories){
   const pages=[]; let page=[]; let productCount=0;
