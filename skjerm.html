@@ -1,0 +1,61 @@
+<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kioskmeny – skjerm</title><style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
+.slide{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+#back{z-index:2;clip-path:inset(0 100% 0 0)}#front{z-index:1}
+#puck,#trail,#edge{position:absolute;z-index:5;pointer-events:none;display:none}
+#puck{width:9vh;height:9vh;margin:-4.5vh 0 0 -4.5vh;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a4f57,#111 55%,#000);box-shadow:0 .8vh 1.6vh rgba(0,0,0,.45),inset 0 -.6vh 0 rgba(255,255,255,.08)}
+#trail{height:5vh;margin-top:-2.5vh;width:28vw;border-radius:5vh}
+#edge{top:0;bottom:0;width:1.2vw;margin-left:-.6vw;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);filter:blur(2px)}
+#error{position:fixed;inset:0;z-index:9;display:none;align-items:center;justify-content:center;background:#112f4a;color:#fff;font:700 28px Arial;padding:40px;text-align:center}
+</style></head><body><iframe class="slide" id="front"></iframe><iframe class="slide" id="back"></iframe><div id="trail"></div><div id="edge"></div><div id="puck"></div><div id="error"></div><script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script><script src="sheets-config.js"></script><script src="google-sheets-loader.js"></script><script>
+// Begge skjermene regner ut alt fra klokka, så de holder takten uten å snakke sammen.
+// ?skjerm=vindu|bane  velger skjerm. ?side=venstre|hoyre  overstyrer fysisk plassering (standard: vindu til venstre).
+const q=new URLSearchParams(location.search);
+const SKJERM=q.get("skjerm")==="bane"?"bane":"vindu";
+const SIDE=q.get("side")||(SKJERM==="vindu"?"venstre":"hoyre");
+const OFFSET=SKJERM==="vindu"?0:1;      // bane viser alltid neste side i lista
+const SCREEN_X=SIDE==="venstre"?0:1;    // plass i det felles "virtuelle" bildet (0–2 skjermbredder)
+const PUCK_MS=1800,PRELOAD_MS=3000;
+document.title="Kioskmeny – mot "+SKJERM;
+
+let base=[],frontUrl="",backUrl="",transitionKey=null;
+// Rotasjonen: matmenyen (sideb) og utstyrsmenyen (sided), med så mange sider som trengs.
+async function buildRotation(){try{const data=await loadKioskData(true);base=[...paginateMenu(data.menuCategories).map((_,i)=>({file:`sideb.html?page=${i+1}`,duration:15000})),...(data.gearCategories.length?paginateMenu(data.gearCategories):[]).map((_,i)=>({file:`sided.html?page=${i+1}`,duration:15000}))];error.style.display="none";}catch(e){if(!base.length){error.style.display="flex";error.textContent=e.message;}}}
+
+// Tidsluke k: vindu viser s[k], bane viser s[k+1]. Luka varer like lenge som den lengste av de to.
+function slotAt(t){const s=base,n=s.length;if(!n)return null;const durs=s.map((x,k)=>Math.max(x.duration,s[(k+1)%n].duration)),L=durs.reduce((a,b)=>a+b,0),cycle=Math.floor(t/L);let p=t%L,k=0;while(p>=durs[k]){p-=durs[k];k++;}const start=t-p,file=s[(k+OFFSET)%n].file;return{index:cycle*n+k,start,end:start+durs[k],url:file+(file.includes("?")?"&":"?")+"v="+start};}
+
+function setClip(el,dir,x){const px=Math.max(0,Math.min(1,x))*100;el.style.clipPath=dir>0?`inset(0 ${100-px}% 0 0)`:`inset(0 0 0 ${px}%)`;}
+function hidePuck(){puck.style.display=trail.style.display=edge.style.display="none";}
+let fEl=document.getElementById("front"),bEl=document.getElementById("back");
+function promote(){// bak-rammen blir den nye fremre
+const old=fEl;fEl=bEl;bEl=old;fEl.style.zIndex=1;fEl.style.clipPath="none";bEl.style.zIndex=2;bEl.style.clipPath="inset(0 100% 0 0)";frontUrl=backUrl;backUrl="";}
+
+function tick(){requestAnimationFrame(tick);if(!base.length)return;const now=Date.now(),cur=slotAt(now);if(!cur)return;
+  const since=now-cur.start;
+  if(since<PUCK_MS&&backUrl===cur.url&&frontUrl!==cur.url){
+    // Pucken farer over begge skjermene; retningen veksler for hver luke.
+    const dir=cur.index%2===0?1:-1,e=since/PUCK_MS,ease=1-Math.pow(1-e,1.6);
+    const X=dir>0?-0.1+2.2*ease:2.1-2.2*ease,x=X-SCREEN_X;
+    const y=30+((cur.index*37)%40);// samme høyde på begge skjermene
+    setClip(bEl,dir,x);
+    if(x>-0.1&&x<1.1){puck.style.display=trail.style.display=edge.style.display="block";
+      puck.style.left=x*100+"vw";puck.style.top=y+"vh";puck.style.transform=`rotate(${dir*e*900}deg)`;
+      edge.style.left=x*100+"vw";
+      trail.style.top=y+"vh";trail.style.left=dir>0?`calc(${x*100}vw - 28vw)`:x*100+"vw";
+      trail.style.background=`linear-gradient(${dir>0?90:270}deg,rgba(10,20,30,0),rgba(10,20,30,.35))`;
+    }else hidePuck();
+    return;}
+  hidePuck();
+  if(backUrl===cur.url&&frontUrl!==cur.url)promote();
+  if(frontUrl!==cur.url){fEl.src=frontUrl=cur.url;}// oppstart eller ute av takt: hopp rett inn
+  const next=slotAt(cur.end);
+  if(next&&cur.end-now<PRELOAD_MS&&backUrl!==next.url&&next.url!==frontUrl){bEl.style.clipPath="inset(0 100% 0 0)";bEl.src=backUrl=next.url;}
+}
+
+// Dobbeltklikk: fullskjerm av/på
+addEventListener("dblclick",()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen());
+// Hent data på nytt hvert 5. minutt, på samme klokkeslett for begge skjermene.
+buildRotation().then(()=>requestAnimationFrame(tick));
+setTimeout(function again(){buildRotation();setTimeout(again,300000-Date.now()%300000);},300000-Date.now()%300000);
+</script></body></html>
