@@ -1,6 +1,6 @@
 // Illustrasjoner som fyller tomrommet under varene i utstyrsmenyen (sided.html).
 // Velges ut fra kategorinavnet; kategorier uten treff får ingen illustrasjon.
-const ILLU_NAVY="#112f4a",ILLU_RED="#ef3e36",ILLU_LIGHT="#e6edf3";
+const ILLU_NAVY="#0d3b66",ILLU_RED="#c0392b",ILLU_LIGHT="#edf2f7";
 const ILLUSTRASJONER={
   // Hockeykølle med tape på bladet, taperull og puck
   rekvisita:`<svg viewBox="0 0 400 260" role="img" aria-label="Hockeykølle, tape og puck">
