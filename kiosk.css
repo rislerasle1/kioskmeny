@@ -2,6 +2,7 @@
    Samme profil som iceice og resultater: Public Sans, dyp blå + rød,
    skarpe hjørner, tynne linjer og små versal-titler. */
 :root {
+  --u: min(1vw, 1.7778vh);   /* 1 % av 16:9-flatens bredde, uansett vindusform */
   --ice: #f4f8fb;
   --deep: #0d3b66;
   --deep-2: #17518c;
@@ -28,66 +29,66 @@ body { display: flex; align-items: center; justify-content: center; }
   display: grid; grid-template-columns: 25% 75%; grid-template-rows: 100%;
   background: var(--ice); overflow: hidden;
 }
-.kicker { font-size: .75vw; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
+.kicker { font-size: calc(.75 * var(--u)); font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
 
 /* ---------- Margen ---------- */
 aside {
   min-height: 0; display: flex; flex-direction: column;
-  background: var(--side); color: #fff; padding: 2.2vw 2vw 2vw;
-  border-right: .25vw solid var(--accent);
+  background: var(--side); color: #fff; padding: calc(2.2 * var(--u)) calc(2 * var(--u)) calc(2 * var(--u));
+  border-right: calc(.25 * var(--u)) solid var(--accent);
 }
-.brand { display: flex; align-items: center; gap: .9vw; }
-.brand img { height: 3.4vw; display: block; }
+.brand { display: flex; align-items: center; gap: calc(.9 * var(--u)); }
+.brand img { height: calc(3.4 * var(--u)); display: block; }
 .brand .kicker { color: var(--side-kicker); }
-aside h1 { font-size: 3.6vw; font-weight: 900; line-height: 1; letter-spacing: -.02em; margin-top: 1.6vw; }
-#intro { font-size: .95vw; font-weight: 600; color: var(--side-muted); margin-top: .8vw; line-height: 1.35; }
-.status { margin-top: 1.8vw; padding: .8vw 1vw; background: rgba(255,255,255,.08); border-left: .35vw solid var(--accent); }
-#hours { font-size: 1.15vw; font-weight: 800; line-height: 1.25; }
-#hoursNote { font-size: .78vw; font-weight: 600; color: var(--side-muted); margin-top: .5vw; line-height: 1.35; }
+aside h1 { font-size: calc(3.6 * var(--u)); font-weight: 900; line-height: 1; letter-spacing: -.02em; margin-top: calc(1.6 * var(--u)); }
+#intro { font-size: calc(.95 * var(--u)); font-weight: 600; color: var(--side-muted); margin-top: calc(.8 * var(--u)); line-height: 1.35; }
+.status { margin-top: calc(1.8 * var(--u)); padding: calc(.8 * var(--u)) calc(1 * var(--u)); background: rgba(255,255,255,.08); border-left: calc(.35 * var(--u)) solid var(--accent); }
+#hours { font-size: calc(1.15 * var(--u)); font-weight: 800; line-height: 1.25; }
+#hoursNote { font-size: calc(.78 * var(--u)); font-weight: 600; color: var(--side-muted); margin-top: calc(.5 * var(--u)); line-height: 1.35; }
 #hoursNote:empty { display: none; }
 .marg { margin-top: auto; }
-#hostBox { padding-bottom: 1.4vw; margin-bottom: 1.4vw; border-bottom: 1px solid rgba(255,255,255,.18); }
+#hostBox { padding-bottom: calc(1.4 * var(--u)); margin-bottom: calc(1.4 * var(--u)); border-bottom: 1px solid rgba(255,255,255,.18); }
 #hostBox .kicker { color: var(--side-kicker); }
-#host { font-size: 1.3vw; font-weight: 900; margin-top: .3vw; }
-#clock { font-size: 4.2vw; font-weight: 900; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-#date { font-size: .9vw; font-weight: 600; color: var(--side-muted); margin-top: .35vw; }
-#error { font-size: .9vw; color: #ffd0cb; margin-top: 1vw; }
+#host { font-size: calc(1.3 * var(--u)); font-weight: 900; margin-top: calc(.3 * var(--u)); }
+#clock { font-size: calc(4.2 * var(--u)); font-weight: 900; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+#date { font-size: calc(.9 * var(--u)); font-weight: 600; color: var(--side-muted); margin-top: calc(.35 * var(--u)); }
+#error { font-size: calc(.9 * var(--u)); color: #ffd0cb; margin-top: calc(1 * var(--u)); }
 
 /* ---------- Menyen ---------- */
 main { min-height: 0; display: flex; flex-direction: column; }
 .top {
   flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;
-  padding: .7vw 1.4vw; background: #fff; border-bottom: 1px solid var(--line); color: var(--muted);
+  padding: calc(.7 * var(--u)) calc(1.4 * var(--u)); background: #fff; border-bottom: 1px solid var(--line); color: var(--muted);
 }
 .top:not(:has(span:not(:empty))) { display: none; }
 #notice { color: var(--red); }
 .menu {
-  flex: 1; min-height: 0; display: grid; gap: .15vw; background: var(--line);
+  flex: 1; min-height: 0; display: grid; gap: calc(.15 * var(--u)); background: var(--line);
   grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
 }
 .menu.two { grid-template-rows: 1fr; }
 .block { min-height: 0; display: flex; flex-direction: column; background: #fff; overflow: hidden; }
 .block h2 {
-  flex-shrink: 0; font-size: 1.35vw; font-weight: 900; color: var(--deep);
-  padding: .65vw 1.2vw; background: var(--head); border-bottom: 1px solid var(--line);
+  flex-shrink: 0; font-size: calc(1.35 * var(--u)); font-weight: 900; color: var(--deep);
+  padding: calc(.65 * var(--u)) calc(1.2 * var(--u)); background: var(--head); border-bottom: 1px solid var(--line);
 }
 .item {
-  display: grid; grid-template-columns: 1fr auto; column-gap: 1vw; align-items: baseline;
-  padding: .55vw 1.2vw; border-bottom: 1px solid var(--line-soft);
+  display: grid; grid-template-columns: 1fr auto; column-gap: calc(1 * var(--u)); align-items: baseline;
+  padding: calc(.55 * var(--u)) calc(1.2 * var(--u)); border-bottom: 1px solid var(--line-soft);
 }
-.name { font-size: 1.2vw; font-weight: 800; }
-.price { font-size: 1.3vw; font-weight: 900; color: var(--deep); font-variant-numeric: tabular-nums; }
-.desc { grid-column: 1 / 2; font-size: .75vw; font-weight: 600; color: var(--muted); margin-top: .1vw; }
+.name { font-size: calc(1.2 * var(--u)); font-weight: 800; }
+.price { font-size: calc(1.3 * var(--u)); font-weight: 900; color: var(--deep); font-variant-numeric: tabular-nums; }
+.desc { grid-column: 1 / 2; font-size: calc(.75 * var(--u)); font-weight: 600; color: var(--muted); margin-top: calc(.1 * var(--u)); }
 .badge {
-  display: inline-block; vertical-align: .15em; margin-left: .6vw; padding: .2vw .5vw;
-  background: var(--red); color: #fff; font-size: .6vw; font-weight: 900;
+  display: inline-block; vertical-align: .15em; margin-left: calc(.6 * var(--u)); padding: calc(.2 * var(--u)) calc(.5 * var(--u));
+  background: var(--red); color: #fff; font-size: calc(.6 * var(--u)); font-weight: 900;
   letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
 }
 /* Få kategorier (utstyr): større tekst og illustrasjon i tomrommet */
-.menu.two .block h2 { font-size: 1.8vw; padding: .9vw 1.6vw; }
-.menu.two .item { padding: .9vw 1.6vw; }
-.menu.two .name { font-size: 1.6vw; }
-.menu.two .price { font-size: 1.7vw; }
-.menu.two .desc { font-size: .95vw; }
-.illu { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 1.5vw; }
-.illu svg { width: 100%; height: 100%; max-height: 32vw; }
+.menu.two .block h2 { font-size: calc(1.8 * var(--u)); padding: calc(.9 * var(--u)) calc(1.6 * var(--u)); }
+.menu.two .item { padding: calc(.9 * var(--u)) calc(1.6 * var(--u)); }
+.menu.two .name { font-size: calc(1.6 * var(--u)); }
+.menu.two .price { font-size: calc(1.7 * var(--u)); }
+.menu.two .desc { font-size: calc(.95 * var(--u)); }
+.illu { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: calc(1.5 * var(--u)); }
+.illu svg { width: 100%; height: 100%; max-height: calc(32 * var(--u)); }
