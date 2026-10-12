@@ -17,12 +17,12 @@
 </aside>
 <main><div class="top"><span id="notice"></span><span id="pageInfo"></span></div><div class="menu" id="menu"></div></main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script><script src="sheets-config.js"></script><script src="google-sheets-loader.js"></script><script src="marg.js"></script><script src="illustrasjoner.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script><script src="sheets-config.js"></script><script src="google-sheets-loader.js"></script><script src="marg.js"></script><script src="hilsener.js"></script><script src="illustrasjoner.js"></script>
 <script>
 loadKioskData(true).then(d=>{
   const pages=paginateMenu(d.gearCategories),page=Math.max(1,Number(new URLSearchParams(location.search).get("page"))||1),cats=pages[page-1]||[];
   pageInfo.textContent=pages.length>1?`Side ${page} av ${pages.length}`:"";
-  intro.textContent=d.settings.rekvisitaIntro||"Glemt noe? Vi har utstyret du trenger.";notice.textContent=d.settings.rekvisitaNotice||"";
+  intro.textContent=dagensHilsen();notice.textContent=d.settings.rekvisitaNotice||"";
   showHost(d);showHours(d);
   menu.classList.toggle("two",cats.length<=2);
   menu.innerHTML=cats.map(c=>`<section class="block"><h2>${esc(c.name)}</h2>${c.items.map(i=>`<div class="item"><div class="name">${esc(i.name)}${i.badge?`<span class="badge">${esc(i.badgeIcon)} ${esc(i.badge)}</span>`:""}</div><div class="price">${i.price?`${esc(i.price)},-`:""}</div>${i.description?`<div class="desc">${esc(i.description)}</div>`:""}</div>`).join("")}${illustrasjon(c.name)}</section>`).join("");
